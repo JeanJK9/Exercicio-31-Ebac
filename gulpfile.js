@@ -13,23 +13,6 @@ const browserSync = require('browser-sync').create()
 const sass = require('gulp-sass')(require('node-sass'))
 const reload = browserSync.reload
 
-function tarefasCSS(callback) {
-
-    gulp.src([
-            './node_modules/bootstrap/dist/css/bootstrap.css',
-            './node_modules/@fortawesome/fontawesome-free/css/fontawesome.css',
-            './vendor/owl/css/owl.css',
-            './vendor/jquery-ui/jquery-ui.css'
-        ])
-        .pipe(stripCss())                   // remove comentários
-        .pipe(concat('libs.css'))         // mescla arquivos
-        .pipe(cssmin())                     // minifica css
-        .pipe(rename({ suffix: '.min'}))    // styles.min.css
-        .pipe(gulp.dest('./dist/css'))      // cria arquivo em novo diretório
-    
-    return callback()
-}
-
 function tarefasSASS(cb) {
 
     gulp.src('./src/scss/**/*.scss')
@@ -39,29 +22,6 @@ function tarefasSASS(cb) {
 
     return cb()
 }
-
-function tarefasJS(callback){
-
-    gulp.src([
-            './node_modules/jquery/dist/jquery.js',
-            './node_modules/bootstrap/dist/js/bootstrap.js',
-            './vendor/owl/js/owl.js',
-            './vendor/jquery-mask/jquery.mask.js',
-            //'./vendor/jquery-ui/jquery-ui.js',
-            './src/js/custom.js'
-        ])
-        .pipe(babel({
-            comments: false,
-            presets: ['@babel/env']
-        }))                    
-        .pipe(concat('scripts.js'))         // mescla arquivos
-        .pipe(uglify())                     // minifica js
-        .pipe(rename({ suffix: '.min'}))    // scripts.min.js
-        .pipe(gulp.dest('./dist/js'))       // cria arquivo em novo diretório
-    
-    return callback()      
-}
-
 
 function tarefasImagem(){
     
@@ -105,10 +65,8 @@ function end(cb) {
     return cb()
  }
 
-const process = gulp.series( tarefasHTML, tarefasCSS, tarefasJS, tarefasSASS, end)
+const process = gulp.series( tarefasHTML, tarefasSASS, end)
 
-exports.styles = tarefasCSS
-exports.scripts = tarefasJS
 exports.images = tarefasImagem
 exports.sass = tarefasSASS
 
